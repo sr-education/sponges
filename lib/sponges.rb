@@ -9,7 +9,7 @@ end
 
 module Sponges
   STOP_SIGNALS = [:INT, :QUIT, :TERM]
-  SIGNALS = STOP_SIGNALS + [:HUP, :TTIN, :TTOU, :CHLD]
+  SIGNALS = STOP_SIGNALS + [:HUP, :TTIN, :TTOU, :CHLD, :USR1, :USR2]
 
   module_function
 

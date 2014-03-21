@@ -10,6 +10,9 @@ module Sponges
       @queue, @notifier = IO.pipe
       at_exit do
         for_supervisor do
+          Sponges.logger.info 'All sponges dead...terminating instance.'
+          instance = AWS.ec2.instances.select{|inst| inst.private_dns_name == `hostname -f`.strip}.first
+          instance.terminate if instance.respond_to?(:terminate)
           Sponges.logger.info "Supervisor exits."
         end
       end
@@ -92,6 +95,14 @@ module Sponges
     alias handler_quit handler_int
     alias handler_term handler_int
     alias handler_hup handler_int
+
+    # user defined signal to reload files
+    def handler_usr1(signal)
+      for_supervisor do
+        Sponges.logger.warn "Supervisor received #{signal} signal."
+        # do nothing specific here
+      end
+    end
 
     def kill_them_all(signal)
       store.children_pids.map do |pid|

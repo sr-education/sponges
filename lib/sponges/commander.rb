@@ -82,6 +82,20 @@ module Sponges
       end
     end
 
+    # Reload the files associated with the workers; mapping the USR1 signal to this
+    def reload
+      Sponges.logger.info "Runner #{@name} reload message received."
+      if supervisor_pid
+        begin
+          Process.kill :USR1, supervisor_pid.to_i
+        rescue Errno::ESRCH => e
+          Sponges.logger.error e
+        end
+      else
+        Sponges.logger.info "No supervisor found."
+      end
+    end
+
     private
 
     def supervisor_pid
