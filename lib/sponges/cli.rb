@@ -54,6 +54,11 @@ module Sponges
       Sponges::Commander.new(Sponges::Configuration.worker_name, options).
         decrement
     end
+
+    desc "Reloads the files in the worker folder"
+    def reload(options = {})
+      Sponges::Commander.new(Sponges::Configuration.worker_name, options).reload
+    end
   end
 
 end
