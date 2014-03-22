@@ -100,7 +100,13 @@ module Sponges
     def handler_usr1(signal)
       for_supervisor do
         Sponges.logger.warn "Supervisor received #{signal} signal."
-        # do nothing specific here
+        store.children_pids.each do |pid|
+          begin
+            Process.kill signal, pid
+          rescue Errno::ECHILD => e
+            # Don't panic
+          end
+        end
       end
     end
 
