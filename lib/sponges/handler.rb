@@ -102,7 +102,7 @@ module Sponges
         Sponges.logger.warn "Supervisor received #{signal} signal."
         store.children_pids.each do |pid|
           begin
-            Process.kill signal, pid
+            # Process.kill signal, pid
           rescue Errno::ECHILD => e
             # Don't panic
           end
