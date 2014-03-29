@@ -18,8 +18,8 @@ module Sponges
           `/usr/bin/knife node delete #{full_hostname} -y -u #{full_hostname} -s https://nyx.reachnetwork.com:443 -k /etc/chef/client.pem -c /etc/chef/client.rb`
           `/usr/bin/knife client delete #{full_hostname} -y -u #{full_hostname} -s https://nyx.reachnetwork.com:443 -k /etc/chef/client.pem -c /etc/chef/client.rb`
           # shutdown the instance
-          scaling_group.client.terminate_instance_in_auto_scaling_group({:instance_id => instance.id, :should_decrement_desired_capacity => true})
           Sponges.logger.info "Supervisor exits."
+          scaling_group.client.terminate_instance_in_auto_scaling_group({:instance_id => instance.id, :should_decrement_desired_capacity => true})
         end
       end
     end
