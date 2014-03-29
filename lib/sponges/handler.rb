@@ -13,13 +13,11 @@ module Sponges
           Sponges.logger.info 'All sponges dead...terminating instance.'
           full_hostname = `hostname -f`.strip
           instance = AWS.ec2.instances.select{|inst| inst.private_dns_name == full_hostname}.first
-          scaling_group = AWS.auto_scaling.groups.select{|s| s.name == 'Sponges'}.first
           # remove this node from chef server before terminating instance
           `/usr/bin/knife node delete #{full_hostname} -y -u #{full_hostname} -s https://nyx.reachnetwork.com:443 -k /etc/chef/client.pem -c /etc/chef/client.rb`
           `/usr/bin/knife client delete #{full_hostname} -y -u #{full_hostname} -s https://nyx.reachnetwork.com:443 -k /etc/chef/client.pem -c /etc/chef/client.rb`
-          # shutdown the instance
+          instance.terminate if instance.respond_to?(:terminate)
           Sponges.logger.info "Supervisor exits."
-          scaling_group.client.terminate_instance_in_auto_scaling_group({:instance_id => instance.id, :should_decrement_desired_capacity => true})
         end
       end
     end
