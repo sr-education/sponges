@@ -14,8 +14,8 @@ module Sponges
           full_hostname = `hostname -f`.strip
           instance = AWS.ec2.instances.select{|inst| inst.private_dns_name == full_hostname}.first
           # remove this node from chef server before terminating instance
-          `/usr/bin/knife node delete #{full_hostname} -y -u #{full_hostname} -s https://nyx.reachnetwork.com:443 -k /etc/chef/client.pem -c /etc/chef/client.rb`
-          `/usr/bin/knife client delete #{full_hostname} -y -u #{full_hostname} -s https://nyx.reachnetwork.com:443 -k /etc/chef/client.pem -c /etc/chef/client.rb`
+          `rvm reset && /usr/bin/knife node delete #{full_hostname} -y -u #{full_hostname} -s https://nyx.reachnetwork.com:443 -k /etc/chef/client.pem -c /etc/chef/client.rb`
+          `rvm reset && /usr/bin/knife client delete #{full_hostname} -y -u #{full_hostname} -s https://nyx.reachnetwork.com:443 -k /etc/chef/client.pem -c /etc/chef/client.rb`
           instance.terminate if instance.respond_to?(:terminate)
           Sponges.logger.info "Supervisor exits."
         end
