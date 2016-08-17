@@ -1,5 +1,5 @@
 # encoding: utf-8
-%w[boson/runner socket logger machine forwardable json].each do |lib|
+%w[boson/runner socket logger machine forwardable json aws].each do |lib|
   require lib
 end
 %w[version alive configuration worker handler response listener supervisor
