@@ -1,5 +1,5 @@
 # encoding: utf-8
-require 'aws'
+require 'aws-sdk'
 
 module Sponges
   class Handler
