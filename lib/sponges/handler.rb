@@ -1,4 +1,6 @@
 # encoding: utf-8
+require 'aws'
+
 module Sponges
   class Handler
     extend Forwardable
