@@ -14,7 +14,7 @@ module Sponges
           full_hostname = `hostname -f`.strip
           ec2 = Aws::EC2::Client.new(region: 'us-east-1')
           instance = ec2.describe_instances.reservations.select{|inst| inst.instances.first.private_dns_name == full_hostname}.first
-          ec2.terminate_instances(instance_ids: [instance.instance_id])
+          ec2.terminate_instances(instance_ids: [instance.instance_id]) if instance.present?
           Sponges.logger.info "Supervisor exits."
         end
       end
