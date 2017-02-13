@@ -19,5 +19,5 @@ Gem::Specification.new do |s|
   s.add_dependency "machine" , '~>0.1.0'
   s.add_development_dependency 'rspec', '~>2.10.0'
   s.add_development_dependency 'rake'
-  s.add_development_dependency 'aws-sdk-v1'
+  s.add_development_dependency 'aws-sdk', '~> 2'
 end

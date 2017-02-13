@@ -12,8 +12,9 @@ module Sponges
         for_supervisor do
           Sponges.logger.info 'All sponges dead...terminating instance.'
           full_hostname = `hostname -f`.strip
-          instance = AWS.ec2.instances.select{|inst| inst.private_dns_name == full_hostname}.first
-          instance.terminate if instance.respond_to?(:terminate)
+          ec2 = Aws::EC2::Client.new(region: 'us-east-1')
+          instance = ec2.describe_instances.reservations.select{|inst| inst.instances.first.private_dns_name == full_hostname}.first
+          ec2.terminate_instances(instance_ids: [instance.instance_id])
           Sponges.logger.info "Supervisor exits."
         end
       end
