@@ -12,9 +12,10 @@ module Sponges
         for_supervisor do
           Sponges.logger.info 'All sponges dead...terminating instance.'
           full_hostname = `hostname -f`.strip
-          ec2 = Aws::EC2::Client.new(region: 'us-east-1')
-          instance = ec2.describe_instances.reservations.select{|inst| inst.instances.first.private_dns_name == full_hostname}.first
-          ec2.terminate_instances(instance_ids: [instance.instance_id]) if instance.present?
+          scaling_group = AWS.auto_scaling.groups.select{|s| s.name == 'Sponges'}.first
+          instance = AWS.ec2.instances.select{|inst| inst.private_dns_name == full_hostname}.first
+          # shutdown the instance
+          scaling_group.client.terminate_instance_in_auto_scaling_group({:instance_id => instance.id, :should_decrement_desired_capacity => true})
           Sponges.logger.info "Supervisor exits."
         end
       end
