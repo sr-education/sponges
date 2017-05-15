@@ -15,7 +15,7 @@ module Sponges
           scaling_group = AWS.auto_scaling.groups.select{|s| s.name == 'Sponges'}.first
           instance = AWS.ec2.instances.select{|inst| inst.private_dns_name == full_hostname}.first
           # shutdown the instance
-          scaling_group.client.terminate_instance_in_auto_scaling_group({:instance_id => instance.id, :should_decrement_desired_capacity => true})
+          scaling_group.client.terminate_instance_in_auto_scaling_group({:instance_id => instance.id, :should_decrement_desired_capacity => false})
           Sponges.logger.info "Supervisor exits."
         end
       end
